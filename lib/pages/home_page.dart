@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/services/random_number.dart';
+import 'package:my_app/components/page_title.dart';
+import 'package:my_app/pages/login_page.dart';
+import 'package:my_app/pages/page1.dart';
+import 'package:my_app/pages/page2.dart';
+import 'package:my_app/pages/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,81 +13,105 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var number = 0;
-  var clickedAmount = 0;
-
+  PageController pageController = PageController(initialPage: 0);
+  int pagePosition = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text('Meu app',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        title: const PageTitle(title: 'My App'),
+        centerTitle: true,
+      ),
+      drawer: Drawer(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 30,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ProfilePage()));
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: const Text('Profile',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Divider(thickness: 1),
+              InkWell(
+                onTap: () {},
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: const Text('Settings',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Divider(thickness: 1),
+              InkWell(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()));
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: const Text('Sair',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
         ),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('O número gerado foi: $number.',
-                style:
-                    const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-            Text('Foi clicado: $clickedAmount vezes.',
-                style:
-                    const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    color: Colors.red,
-                    child: const Text(
-                      '10',
-                      style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    color: Colors.blue,
-                    child: const Text(
-                      '20',
-                      style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    color: Colors.green,
-                    child: const Text(
-                      '30',
-                      style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: PageView(
+                controller: pageController,
+                onPageChanged: (value) {
+                  setState(() {
+                    pagePosition = value;
+                  });
+                },
+                children: const [Page1(), Page2()]),
+          ),
+          BottomNavigationBar(
+              onTap: (value) {
+                pageController.jumpToPage(value);
+              },
+              currentIndex: pagePosition,
+              items: const [
+                BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
+                BottomNavigationBarItem(
+                    label: 'Profile', icon: Icon(Icons.person))
+              ])
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add_box),
-        onPressed: () {
-          setState(() {
-            clickedAmount += 1;
-            number = CreateRandomNumberService.randomNumb(1000);
-          });
-        },
-      ),
-    );
+    ));
   }
 }

@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const LoginPage(),
       theme: ThemeData(
-        primarySwatch: Colors.amber,
+        primarySwatch: Colors.teal,
         textTheme: GoogleFonts.ralewayTextTheme(),
       ),
     );
