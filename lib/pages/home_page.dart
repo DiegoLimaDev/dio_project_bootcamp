@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/components/page_title.dart';
+import 'package:my_app/shared/widgtes/page_title.dart';
 import 'package:my_app/pages/login_page.dart';
 import 'package:my_app/pages/page1.dart';
 import 'package:my_app/pages/page2.dart';
