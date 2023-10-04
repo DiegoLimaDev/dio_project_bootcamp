@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/pages/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,7 +12,26 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  bool isChecked = false;
+  late SharedPreferences storage;
   bool isObscure = true;
+  String keyEmail = "keyEmail";
+  String keyPassword = "keyPassword";
+  String keyChecked = 'keyChecked';
+
+  @override
+  void initState() {
+    super.initState();
+    getStorage();
+  }
+
+  Future<void> getStorage() async {
+    storage = await SharedPreferences.getInstance();
+    emailController.text = storage.getString(keyEmail) ?? '';
+    passwordController.text = storage.getString(keyPassword) ?? '';
+    isChecked = storage.getBool(keyChecked) ?? false;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +128,26 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ))),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: CheckboxListTile(
+                        controlAffinity: ListTileControlAffinity.leading,
+                        activeColor: Colors.amber,
+                        fillColor: isChecked
+                            ? null
+                            : MaterialStateProperty.all(Colors.white),
+                        title: const Text(
+                          'Salvar credenciais',
+                          style: TextStyle(fontSize: 14, color: Colors.white),
+                        ),
+                        value: isChecked,
+                        onChanged: (value) {
+                          isChecked = value!;
+                          setState(() {});
+                        }),
+                  ),
                   Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
@@ -126,6 +165,16 @@ class _LoginPageState extends State<LoginPage> {
                               const SnackBar(
                                   content: Text('Erro nas credenciais',
                                       style: TextStyle(fontSize: 20))));
+                        }
+
+                        storage.setBool(keyChecked, isChecked);
+                        if (isChecked) {
+                          storage.setString(keyEmail, emailController.text);
+                          storage.setString(
+                              keyPassword, passwordController.text);
+                        } else {
+                          storage.remove(keyEmail);
+                          storage.remove(keyPassword);
                         }
                       },
                       style: ButtonStyle(
