@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                     margin: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 10),
                     child: TextButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (emailController.text.trim() == 'diego' &&
                             passwordController.text.trim() == '123') {
                           Navigator.pushReplacement(
@@ -167,10 +167,11 @@ class _LoginPageState extends State<LoginPage> {
                                       style: TextStyle(fontSize: 20))));
                         }
 
-                        storage.setBool(keyChecked, isChecked);
+                        await storage.setBool(keyChecked, isChecked);
                         if (isChecked) {
-                          storage.setString(keyEmail, emailController.text);
-                          storage.setString(
+                          await storage.setString(
+                              keyEmail, emailController.text);
+                          await storage.setString(
                               keyPassword, passwordController.text);
                         } else {
                           storage.remove(keyEmail);
