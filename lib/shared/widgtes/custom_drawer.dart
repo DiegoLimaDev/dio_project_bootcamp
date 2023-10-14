@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/pages/config_page.dart';
+import 'package:my_app/pages/config_page_hive.dart';
 import 'package:my_app/pages/login_page.dart';
 import 'package:my_app/pages/profile_page.dart';
+import 'package:my_app/pages/random_numbers_hive.dart';
 import 'package:my_app/pages/random_numbers_page.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -77,7 +80,13 @@ class CustomDrawer extends StatelessWidget {
           ),
           const Divider(thickness: 1),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (builder) => const ConfigPageHive()));
+            },
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -149,7 +158,7 @@ class CustomDrawer extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (builder) => const RandomNumbersPage()));
+                        builder: (builder) => const RandomNumbersHive()));
               },
               child: Container(
                 width: double.infinity,

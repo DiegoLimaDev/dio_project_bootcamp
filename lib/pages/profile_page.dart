@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:my_app/pages/home_page.dart';
 import 'package:my_app/repositories/languages_repository.dart';
 import 'package:my_app/repositories/nivel_repository.dart';
+import 'package:my_app/services/app_storage_service.dart';
 import 'package:my_app/services/generate_list.dart';
 import 'package:my_app/shared/widgtes/page_title.dart';
 import 'package:my_app/shared/widgtes/text_label.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -24,16 +26,29 @@ class _ProfilePageState extends State<ProfilePage> {
   LanguageRepository langRepo = LanguageRepository();
   var langs = [];
   var selectedLevel = '';
-  var selectedLangs = [];
+  List<String> selectedLangs = [];
   double salary = 0;
   int experienceTime = 0;
   bool saving = false;
+  late SharedPreferences storage;
+  AppStorageService appStorage = AppStorageService();
 
   @override
   void initState() {
+    loadData();
     levels = levelRepo.returnNivels();
     langs = langRepo.returnLanguages();
     super.initState();
+  }
+
+  void loadData() async {
+    nameController.text = await appStorage.getProfileDataName();
+    birthDayController.text = await appStorage.getProfileDataBirthday();
+    selectedLevel = await appStorage.getProfileDataExperience();
+    selectedLangs = await appStorage.getProfileDataLangs();
+    salary = await appStorage.getProfileDataSalary();
+    experienceTime = await appStorage.getProfileDataExpTime();
+    Timer(const Duration(milliseconds: 200), () => setState(() {}));
   }
 
   List<DropdownMenuItem> returnItens(int maxAmount) {
@@ -44,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
         .toList();
   }
 
-  void checkValidity() {
+  void checkValidity() async {
     if (nameController.text.trim().length < 3) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Nome inválido')));
@@ -70,6 +85,14 @@ class _ProfilePageState extends State<ProfilePage> {
           const SnackBar(content: Text('Pretensão salarial requerida')));
       return;
     }
+
+    await appStorage.setProfileDataName(nameController.text);
+    await appStorage
+        .setProfileDataBirthday(DateTime.parse(birthDayController.text));
+    await appStorage.setProfileDataExperience(selectedLevel);
+    await appStorage.setProfileDataLangs(selectedLangs);
+    await appStorage.setProfileDataSalary(salary);
+    await appStorage.setProfileDataExpTime(experienceTime);
 
     setState(() {
       saving = true;
