@@ -4,7 +4,7 @@ import 'package:my_app/models/config_model.dart';
 class ConfigRepo {
   static late Box _box;
 
-  ConfigRepo._instance() {}
+  ConfigRepo._instance();
 
   static Future<ConfigRepo> load() async {
     if (Hive.isBoxOpen('configs')) {

@@ -3,6 +3,7 @@ import 'package:my_app/pages/images_assets.dart';
 import 'package:my_app/pages/list_view.dart';
 import 'package:my_app/pages/list_view_horizontal.dart';
 import 'package:my_app/pages/task_page.dart';
+import 'package:my_app/pages/test_http.dart';
 import 'package:my_app/shared/widgtes/custom_drawer.dart';
 import 'package:my_app/shared/widgtes/page_title.dart';
 import 'package:my_app/pages/card_page.dart';
@@ -38,6 +39,7 @@ class _HomePageState extends State<HomePage> {
                   });
                 },
                 children: const [
+                  CEPGetPage(),
                   CardPage(),
                   ImageAssetsPage(),
                   ListViewPage(),
@@ -52,6 +54,7 @@ class _HomePageState extends State<HomePage> {
               },
               currentIndex: pagePosition,
               items: const [
+                BottomNavigationBarItem(label: 'HTTP', icon: Icon(Icons.http)),
                 BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
                 BottomNavigationBarItem(
                     label: 'Profile', icon: Icon(Icons.person)),
