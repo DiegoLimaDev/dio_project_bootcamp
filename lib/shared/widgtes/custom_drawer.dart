@@ -3,6 +3,7 @@ import 'package:my_app/pages/config_page.dart';
 import 'package:my_app/pages/config_page_hive.dart';
 import 'package:my_app/pages/login_page.dart';
 import 'package:my_app/pages/profile_page.dart';
+import 'package:my_app/pages/profile_page_hive.dart';
 import 'package:my_app/pages/random_numbers_hive.dart';
 import 'package:my_app/pages/random_numbers_page.dart';
 
