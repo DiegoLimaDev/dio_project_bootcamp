@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/posts_model.dart';
-import 'package:my_app/repositories/posts_repository.dart';
+import 'package:my_app/pages/posts_comments_page.dart';
+import 'package:my_app/repositories/posts/posts_dio_repository.dart';
+import 'package:my_app/repositories/posts/posts_http_repository.dart';
+import 'package:my_app/repositories/posts/posts_repository.interface.dart';
 import 'package:my_app/shared/widgtes/page_title.dart';
 
 class PostsPage extends StatefulWidget {
@@ -12,17 +15,17 @@ class PostsPage extends StatefulWidget {
 
 class _PostsPageState extends State<PostsPage> {
   var posts = <PostsModel>[];
-  PostsRepo postsRepo = PostsRepo();
+  late IPostsRepo postsRepo;
   bool loading = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadData();
   }
 
   void loadData() async {
+    postsRepo = PostsDioRepo();
     setState(() {
       loading = true;
     });
@@ -71,6 +74,32 @@ class _PostsPageState extends State<PostsPage> {
                               style: const TextStyle(fontSize: 14),
                               textAlign: TextAlign.left,
                             ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: double.infinity,
+                              alignment: Alignment.bottomRight,
+                              child: TextButton(
+                                  style: const ButtonStyle(
+                                      alignment: Alignment.center,
+                                      backgroundColor: MaterialStatePropertyAll(
+                                          Colors.green)),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => PostsCommentsPage(
+                                                id: post.id)));
+                                  },
+                                  child: const Text(
+                                    "Comentários",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14),
+                                  )),
+                            )
                           ],
                         ),
                       ),
