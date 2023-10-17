@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/models/heroes_model.dart';
 import 'package:my_app/pages/config_page.dart';
 import 'package:my_app/pages/config_page_hive.dart';
+import 'package:my_app/pages/heroes_page.dart';
 import 'package:my_app/pages/login_page.dart';
 import 'package:my_app/pages/posts_page.dart';
 import 'package:my_app/pages/profile_page.dart';
 import 'package:my_app/pages/profile_page_hive.dart';
 import 'package:my_app/pages/random_numbers_hive.dart';
 import 'package:my_app/pages/random_numbers_page.dart';
+import 'package:my_app/repositories/marvel/heroes_repository.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -192,6 +195,36 @@ class CustomDrawer extends StatelessWidget {
                 children: [
                   Icon(Icons.post_add),
                   Text('Posts',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(thickness: 1),
+          InkWell(
+            onTap: () async {
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const HeroesPage()));
+              // try {
+              //   var heroesRepo = HeroesRepo();
+              //   var heroes = await heroesRepo.getHeroes();
+              //   print(heroes);
+              // } catch (e) {
+              //   print(e);
+              // }
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: const Row(
+                children: [
+                  Icon(Icons.help),
+                  Text('Heróis',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ],
