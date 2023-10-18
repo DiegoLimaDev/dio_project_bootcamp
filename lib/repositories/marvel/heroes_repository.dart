@@ -9,22 +9,22 @@ import 'package:crypto/crypto.dart' as crypto;
 
 class HeroesRepo implements IHeroesRepo {
   @override
-  Future<HeroesModel> getHeroes() async {
+  Future<List<HeroesModel>> getHeroes(int offset) async {
     var ts = DateTime.now().microsecondsSinceEpoch.toString();
-    print(ts);
     var publicKey = dotenv.get('MARVELPUBLICKEY');
     var privateKey = dotenv.get("MARVELAPIKEY");
     var hash = await _generateMd5(ts + privateKey + publicKey);
-    print(hash);
 
-    var query = 'ts=$ts&apikey=$publicKey&hash=$hash';
+    var query = 'offset=$offset&ts=$ts&apikey=$publicKey&hash=$hash';
     var res = await Dio()
         .get('http://gateway.marvel.com/v1/public/characters?$query');
 
     if (res.statusCode == 200) {
-      return HeroesModel.fromJson(res.data);
+      return (res.data['data']['results'] as List)
+          .map((e) => HeroesModel.fromJson(e))
+          .toList();
     }
-    return HeroesModel();
+    return [];
   }
 
   _generateMd5(String data) {

@@ -11,25 +11,48 @@ class HeroesPage extends StatefulWidget {
 }
 
 class _HeroesPageState extends State<HeroesPage> {
+  final ScrollController _scrollController = ScrollController();
   HeroesRepo heroesRepo = HeroesRepo();
-  var heroes = HeroesModel();
+  var heroes = <HeroesModel>[];
   var loading = false;
+  var loading2 = false;
+  int offset = 0;
 
   @override
   void initState() {
+    _scrollController.addListener(() {
+      var paginationPosition = _scrollController.position.maxScrollExtent * 0.7;
+      if (_scrollController.position.pixels >= paginationPosition) {
+        loadData();
+      }
+    });
     super.initState();
     loadData();
   }
 
-  Future<HeroesModel> loadData() async {
-    setState(() {
-      loading = true;
-    });
-    heroes = await heroesRepo.getHeroes();
-    setState(() {
-      loading = false;
-    });
-    return heroes;
+  loadData() async {
+    if (loading || loading2) return;
+    if (heroes.isEmpty) {
+      setState(() {
+        loading = true;
+      });
+      heroes = await heroesRepo.getHeroes(offset);
+      setState(() {
+        loading = false;
+      });
+      return heroes;
+    } else {
+      setState(() {
+        loading2 = true;
+      });
+      offset += 20;
+      var tempHeroesList = await heroesRepo.getHeroes(offset);
+      heroes.addAll(tempHeroesList);
+      setState(() {
+        loading2 = false;
+      });
+      return heroes;
+    }
   }
 
   @override
@@ -46,51 +69,69 @@ class _HeroesPageState extends State<HeroesPage> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: ListView.builder(
-                  itemCount:
-                      (heroes.data == null || heroes.data!.results == null)
-                          ? 0
-                          : heroes.data!.results!.length,
-                  itemBuilder: (_, index) {
-                    var hero = heroes.data!.results![index];
-                    return Card(
-                        elevation: 3,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.network(
-                                '${hero.thumbnail!.path!}.${hero.thumbnail!.extension!}',
-                                width: 100,
-                              ),
-                              Expanded(
-                                child: Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        hero.name!,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(hero.description!)
-                                    ],
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                      controller: _scrollController,
+                      itemCount: heroes.length,
+                      itemBuilder: (_, index) {
+                        var hero = heroes[index];
+                        return Card(
+                            elevation: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Image.network(
+                                    '${hero.thumbnail!.path!}.${hero.thumbnail!.extension!}',
+                                    width: 100,
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ));
-                  }),
+                                  Expanded(
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            hero.name!,
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(hero.description!)
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ));
+                      }),
+                ),
+                Container(
+                  child: loading2
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ElevatedButton(
+                          onPressed: () => loadData(),
+                          child: const Text(
+                            'Carregar mais itens',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 16),
+                          )),
+                ),
+                const SizedBox(
+                  height: 10,
+                )
+              ],
             ),
     ));
   }
