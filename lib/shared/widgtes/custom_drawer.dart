@@ -9,6 +9,7 @@ import 'package:my_app/pages/profile_page.dart';
 import 'package:my_app/pages/profile_page_hive.dart';
 import 'package:my_app/pages/random_numbers_hive.dart';
 import 'package:my_app/pages/random_numbers_page.dart';
+import 'package:my_app/pages/task_http.page.dart';
 import 'package:my_app/repositories/marvel/heroes_repository.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -210,13 +211,6 @@ class CustomDrawer extends StatelessWidget {
               Navigator.pop(context);
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const HeroesPage()));
-              // try {
-              //   var heroesRepo = HeroesRepo();
-              //   var heroes = await heroesRepo.getHeroes();
-              //   print(heroes);
-              // } catch (e) {
-              //   print(e);
-              // }
             },
             child: Container(
               width: double.infinity,
@@ -225,6 +219,29 @@ class CustomDrawer extends StatelessWidget {
                 children: [
                   Icon(Icons.help),
                   Text('Heróis',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(thickness: 1),
+          InkWell(
+            onTap: () async {
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const TaskHttpPage()));
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: const Row(
+                children: [
+                  Icon(Icons.help),
+                  Text('Tasks HTTP',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ],
