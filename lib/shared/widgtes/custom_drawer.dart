@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/models/heroes_model.dart';
+import 'package:my_app/pages/auto_size_text.page.dart';
 import 'package:my_app/pages/config_page.dart';
 import 'package:my_app/pages/config_page_hive.dart';
 import 'package:my_app/pages/heroes_page.dart';
 import 'package:my_app/pages/login_page.dart';
+import 'package:my_app/pages/percent_indicator.page.dart';
 import 'package:my_app/pages/posts_page.dart';
 import 'package:my_app/pages/profile_page.dart';
 import 'package:my_app/pages/profile_page_hive.dart';
@@ -73,7 +76,7 @@ class CustomDrawer extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: const Row(
                 children: [
-                  Icon(Icons.person),
+                  FaIcon(FontAwesomeIcons.user, size: 20),
                   Text('Profile',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
@@ -242,6 +245,54 @@ class CustomDrawer extends StatelessWidget {
                 children: [
                   Icon(Icons.help),
                   Text('Tasks HTTP',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(thickness: 1),
+          InkWell(
+            onTap: () async {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const PercentIndicatorPage()));
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: const Row(
+                children: [
+                  Icon(Icons.help),
+                  Text('Percent Indicator',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Divider(thickness: 1),
+          InkWell(
+            onTap: () async {
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const AutoSizeTextPage()));
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: const Row(
+                children: [
+                  FaIcon(FontAwesomeIcons.textWidth),
+                  Text('AutoSize Text',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ],

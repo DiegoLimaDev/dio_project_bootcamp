@@ -1,3 +1,4 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/pages/images_assets.dart';
 import 'package:my_app/pages/list_view.dart';
@@ -15,9 +16,16 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  PageController pageController = PageController(initialPage: 0);
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  late var tabController =
+      TabController(initialIndex: 0, length: 6, vsync: AnimatedGridState());
   int pagePosition = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(initialIndex: 0, length: 6, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,42 +39,34 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Expanded(
-            child: PageView(
-                controller: pageController,
-                onPageChanged: (value) {
-                  setState(() {
-                    pagePosition = value;
-                  });
-                },
-                children: const [
-                  CEPGetPage(),
-                  CardPage(),
-                  ImageAssetsPage(),
-                  ListViewPage(),
-                  ListViewHorizontalPage(),
-                  TaskPage()
-                ]),
+            child: TabBarView(controller: tabController, children: const [
+              CEPGetPage(),
+              CardPage(),
+              ImageAssetsPage(),
+              ListViewPage(),
+              ListViewHorizontalPage(),
+              TaskPage()
+            ]),
           ),
-          BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              onTap: (value) {
-                pageController.jumpToPage(value);
-              },
-              currentIndex: pagePosition,
-              items: const [
-                BottomNavigationBarItem(label: 'HTTP', icon: Icon(Icons.http)),
-                BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
-                BottomNavigationBarItem(
-                    label: 'Profile', icon: Icon(Icons.person)),
-                BottomNavigationBarItem(
-                    label: 'Profile', icon: Icon(Icons.settings)),
-                BottomNavigationBarItem(
-                    label: 'Profile', icon: Icon(Icons.abc_outlined)),
-                BottomNavigationBarItem(
-                    label: 'Profile', icon: Icon(Icons.abc_outlined))
-              ])
         ],
       ),
+      bottomNavigationBar: ConvexAppBar(
+          style: TabStyle.react,
+          activeColor: Colors.blue,
+          color: Colors.black,
+          backgroundColor: Colors.greenAccent,
+          onTap: (value) {
+            tabController.animateTo(value);
+          },
+          controller: tabController,
+          items: const [
+            TabItem(title: 'HTTP', icon: Icon(Icons.http)),
+            TabItem(title: 'Home', icon: Icon(Icons.home)),
+            TabItem(title: 'Profile', icon: Icon(Icons.person)),
+            TabItem(title: 'Profile', icon: Icon(Icons.settings)),
+            TabItem(title: 'Profile', icon: Icon(Icons.abc_outlined)),
+            TabItem(title: 'Profile', icon: Icon(Icons.abc_outlined))
+          ]),
     ));
   }
 }
