@@ -1,7 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/models/heroes_model.dart';
 import 'package:my_app/pages/auto_size_text.page.dart';
+import 'package:my_app/pages/camera.page.dart';
 import 'package:my_app/pages/config_page.dart';
 import 'package:my_app/pages/config_page_hive.dart';
 import 'package:my_app/pages/heroes_page.dart';
@@ -10,6 +13,7 @@ import 'package:my_app/pages/percent_indicator.page.dart';
 import 'package:my_app/pages/posts_page.dart';
 import 'package:my_app/pages/profile_page.dart';
 import 'package:my_app/pages/profile_page_hive.dart';
+import 'package:my_app/pages/qr_code.page.dart';
 import 'package:my_app/pages/random_numbers_hive.dart';
 import 'package:my_app/pages/random_numbers_page.dart';
 import 'package:my_app/pages/task_http.page.dart';
@@ -23,8 +27,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
         children: [
           InkWell(
             onTap: () {
@@ -293,6 +296,70 @@ class CustomDrawer extends StatelessWidget {
                 children: [
                   FaIcon(FontAwesomeIcons.textWidth),
                   Text('AutoSize Text',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
+          ),
+          const Divider(thickness: 1),
+          InkWell(
+            onTap: () async {
+              var f = NumberFormat('#,###.0#', 'en_BR');
+              var fBr = NumberFormat('#,###.0#', 'pt_BR');
+              print(context.locale.toString());
+              await context.setLocale(const Locale('en', 'US'));
+              print(context.locale.toString());
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: const Row(
+                children: [
+                  FaIcon(FontAwesomeIcons.itunesNote),
+                  Text('Intl',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Divider(thickness: 1),
+          InkWell(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const QRCodePage()));
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: const Row(
+                children: [
+                  FaIcon(FontAwesomeIcons.qrcode),
+                  Text('Qr Code Reader',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Divider(thickness: 1),
+          InkWell(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const CameraPage()));
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: const Row(
+                children: [
+                  FaIcon(FontAwesomeIcons.camera),
+                  Text('Camera',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ],

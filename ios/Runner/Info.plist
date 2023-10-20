@@ -45,5 +45,20 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>pt</string>
+	</array>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to scan QR codes</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs camera access to PhotoLibrary</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs microphone access</string>
 </dict>
 </plist>

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
@@ -11,5 +12,13 @@ void main() async {
   var docsDir = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(docsDir.path);
   Hive.registerAdapter(ProfileDataModelAdapter());
-  runApp(const MyApp());
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+        supportedLocales: const [Locale('en', 'US'), Locale('pt', 'BR')],
+        path:
+            'assets/translations', // <-- change the path of the translation files
+        fallbackLocale: const Locale('pt', 'BR'),
+        child: const MyApp()),
+  );
 }

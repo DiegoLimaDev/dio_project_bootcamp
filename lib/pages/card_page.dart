@@ -24,7 +24,9 @@ class _CardPageState extends State<CardPage> {
 
   void loadData() async {
     cardDetail = await cardDetailRepo.get();
-    setState(() {});
+    Future.delayed(const Duration(milliseconds: 100), () {
+      setState(() {});
+    });
   }
 
   @override
